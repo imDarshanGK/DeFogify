@@ -2,9 +2,10 @@
 
 ## Overview
 
-The dehazing algorithm is designed to enhance the quality of images affected by haze. This method is effective for various applications in image processing where haze reduction is required.
+
 
 This project implements a single-image haze removal technique using the Dark Channel Prior, as described in the research paper: ``Single Image Haze Removal Using Dark Channel Prior``
+The dehazing algorithm is designed to enhance the quality of images affected by haze. This method is effective for various applications in image processing where haze reduction is required.
 
 ## [Research Paper](https://ieeexplore.ieee.org/document/5567108)
 
