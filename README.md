@@ -17,7 +17,19 @@ This project implements a single-image haze removal technique using the Dark Cha
 
 ``Dehazed Image``
 
+
 <img src ="https://github.com/user-attachments/assets/657268d3-7c28-4c13-ad85-c97fdf1fa2e0" height= 300 >
+
+
+
+<img src ="https://github.com/user-attachments/assets/e16e378c-7ebd-4dff-8d6b-d9aef5ab644f" height= 300 >
+
+``Dehazed Image``
+
+<img src ="https://github.com/user-attachments/assets/ac08593d-2579-4496-bb64-a9b48ed7b4d4" height= 300 >
+
+
+
 
 <img src ="https://github.com/user-attachments/assets/870fcd06-28ac-4c15-b5c2-03e05f515321" height= 300 >
 
