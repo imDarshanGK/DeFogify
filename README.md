@@ -12,14 +12,16 @@ This project implements a single-image haze removal technique using the Dark Cha
 
 ## Demo 
 
+
 <img src ="https://github.com/user-attachments/assets/efe6e3c9-2d50-43d8-9218-beb2dbd9fd83" height= 300 >
 
+``Dehazed Image``
 
 <img src ="https://github.com/user-attachments/assets/657268d3-7c28-4c13-ad85-c97fdf1fa2e0" height= 300 >
 
 <img src ="https://github.com/user-attachments/assets/870fcd06-28ac-4c15-b5c2-03e05f515321" height= 300 >
 
-
+``Dehazed Image``
 
 <img src ="https://github.com/user-attachments/assets/e898ee3f-662a-441a-b38f-2362291931df" height= 300 >
 
@@ -29,7 +31,7 @@ This project implements a single-image haze removal technique using the Dark Cha
 
 You can try the dehazing app live at ``Hugging Face``:
 
-[Visit DeFogify in HUgging Face space](https://huggingface.co/spaces/MLap/deFogify)
+[Visit DeFogify in 🤗 space](https://huggingface.co/spaces/MLap/deFogify)
 
 ## Installation
 
