@@ -4,11 +4,8 @@ This documentation guides you in the contribution process.
 
 ## Submitting Contributions👩‍💻
 
-### 1️⃣ Find an issue
-- Browse [Issues](https://github.com/gitgoap/DeFogify/issues) Tab for existing issues or create new ones.
-- Wait for the issue to be assigned before starting your work.
-- **Note:** Every change needs to have an associated issue.
-### 2️⃣ Fork the project
+
+### 1️⃣ Fork the project
 
 [Fork](https://github.com/gitgoap/DeFogify/fork) the repository, this creates a copy of the repository under your GitHub profile for working:
 ```bash
@@ -34,7 +31,7 @@ Create a new branch before working on a new issue:
 git checkoout -b <new_feature>
 ```
 
-### 3️⃣ Work on the assigned issue
+### 2️⃣ Work on the assigned issue
 
 - Follow the [Installation instruction](https://github.com/gitgoap/DeFogify#installation) to set up your environment.
 - Implement the features/fixes.
@@ -46,7 +43,7 @@ git add .
 git file1 file2 file3
 ```
 
-### 4️⃣ Commit
+### 3️⃣ Commit
 
 commit the changes with:
 ```bash
@@ -57,54 +54,19 @@ Add a descriptive message for convenience of the reviewer.
 
 **Note:** Squash multiple commits into one for a clean pull request.
 
-### 5️⃣ Push Changes
+### 4️⃣ Push Changes
 
 Upload your changes to your fork from local:
 ```bash
 git push -u origin branch_name
 ```
 
-### 6️⃣ Pull Request
+### 5️⃣ Pull Request
 
 - Create a Pull Request from your fork
 	 `Contribute` -> `Open Pull Request` 
 	which will be reviewed and suggestions for improvements.
 - Provide a clear title and description linking the associated issue, helps reviewers know context of the Pull Request.
-
-# Alternatively, using GitHub Desktop 🖥️
-
-### 1️⃣ Fork the Repository
-
-[Fork](https://github.com/gitgoap/DeFogify/fork) the repository on GitHub:
-- Open GitHub Desktop and log in to your GitHub account.
-- Go to `File` -> `Clone Repository`.
-- Select your fork and choose a local path to clone it.
-### 2️⃣ Update Your Fork
-
-If you’ve already forked the project, update it before working:
-- In GitHub Desktop, click `Fetch origin` and then `Pull origin` if updates are available.
-### 3️⃣ Create a Branch
-
-Before making changes, create a branch for the issue:
-- Click `Current Branch` -> `New Branch`.
-- Enter a descriptive branch name and click `Create Branch`.
-### 4️⃣ Make Changes
-
-- Follow the [installation instructions](https://github.com/gitgoap/DeFogify#installation).
-- Review changes in GitHub Desktop:
-  - Changed files will appear in the left panel.
-  - Review specific changes in the right panel.
-  - Select files to include in the commit.
-### 5️⃣ Commit and Push
-
-- Enter a summary in the "Summary" field and click `Commit to <branch_name>`.
-- Push changes to your fork with `Push origin`.
-### 6️⃣ Submit a Pull Request
-
-- On GitHub, navigate to your fork and click `Compare & pull request`.
-- Add a relevant title, description, and screenshots (if applicable).
-- Click `Create pull request`.
-
 
 > Your Pull Request will be reviewed and merged by the maintainer 🚀
 
