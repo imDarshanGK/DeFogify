@@ -31,7 +31,7 @@ Create a new branch before working on a new issue:
 git checkoout -b <new_feature>
 ```
 
-### 2️⃣ Work on the assigned issue
+### 2️⃣ Work on feature/fixes
 
 - Follow the [Installation instruction](https://github.com/gitgoap/DeFogify#installation) to set up your environment.
 - Implement the features/fixes.
