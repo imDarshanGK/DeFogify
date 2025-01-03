@@ -71,8 +71,6 @@ PixelDehazer = gr.Interface(
     fn=dehaze,
     inputs=gr.Image(type="numpy"),
     outputs="image",
-    title="Dehaze Images",
-    description="Upload an image or use one of the provided samples to remove haze from images.",
     examples=example_paths,
     cache_examples=False
 )
