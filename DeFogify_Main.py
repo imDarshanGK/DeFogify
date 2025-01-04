@@ -2,19 +2,19 @@ import cv2
 import numpy as np
 import gradio as gr
 
-def dark_channel(img, size = 15):
+def dark_channel(img, size=15):
     r, g, b = cv2.split(img)
     min_img = cv2.min(r, cv2.min(g, b))
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (size, size))
     dc_img = cv2.erode(min_img, kernel)
     return dc_img
 
-def get_atmo(img, percent = 0.001):
-    mean_perpix = np.mean(img, axis = 2).reshape(-1)
+def get_atmo(img, percent=0.001):
+    mean_perpix = np.mean(img, axis=2).reshape(-1)
     mean_topper = mean_perpix[:int(img.shape[0] * img.shape[1] * percent)]
     return np.mean(mean_topper)
 
-def get_trans(img, atom, w = 0.95):
+def get_trans(img, atom, w=0.95):
     x = img / atom
     t = 1 - w * dark_channel(x, 15)
     return t
@@ -48,8 +48,31 @@ def dehaze(image):
 
     # Ensure the result is in the range [0, 1]
     result = np.clip(result, 0, 1)
-    return (result * 255).astype(np.uint8)  
+    return (result * 255).astype(np.uint8)
+
+# Save example images for testing
+example_images = [
+    "Sample Images for Testing/ai-generated-9025430_1280.jpg",
+    "Sample Images for Testing/meadow-5648849_1280.jpg",
+    "Sample Images for Testing/mountains-7662717_1280.jpg",
+    "Sample Images for Testing/mountains-8292685_1280.jpg",
+    "Sample Images for Testing/nature-6722031_1280.jpg"
+]
+
+example_paths = []
+for i, img_path in enumerate(example_images):
+    img = cv2.imread(img_path)
+    save_path = f"example_image_{i+1}.png"
+    cv2.imwrite(save_path, img)
+    example_paths.append([save_path])
 
 # Create Gradio interface
-PixelDehazer = gr.Interface(fn=dehaze, inputs=gr.Image(type="numpy"), outputs="image")
+PixelDehazer = gr.Interface(
+    fn=dehaze,
+    inputs=gr.Image(type="numpy"),
+    outputs="image",
+    examples=example_paths,
+    cache_examples=False
+)
+
 PixelDehazer.launch()
