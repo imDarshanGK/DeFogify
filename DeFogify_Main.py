@@ -6,10 +6,6 @@ def dark_channel(img, size=15):
     """
     Compute the dark channel prior for an image.
 
-    Parameters:
-    img (numpy.ndarray): Input image.
-    size (int): Kernel size for the morphological operation.
-
     Returns:
     numpy.ndarray: Dark channel image.
     """
@@ -23,10 +19,6 @@ def get_atmo(img, percent=0.001):
     """
     Estimate the atmospheric light in the image.
 
-    Parameters:
-    img (numpy.ndarray): Input image.
-    percent (float): Percentage of the brightest pixels to consider for atmospheric light.
-
     Returns:
     float: Estimated atmospheric light.
     """
@@ -38,11 +30,6 @@ def get_trans(img, atom, w=0.95):
     """
     Compute the transmission map of the image.
 
-    Parameters:
-    img (numpy.ndarray): Input image.
-    atom (float): Estimated atmospheric light.
-    w (float): Weighting factor for the dark channel.
-
     Returns:
     numpy.ndarray: Transmission map of the image.
     """
@@ -53,12 +40,6 @@ def get_trans(img, atom, w=0.95):
 def guided_filter(p, i, r, e):
     """
     Apply a guided filter to the transmission map.
-
-    Parameters:
-    p (numpy.ndarray): Input transmission map.
-    i (numpy.ndarray): Guidance image (grayscale version of the input image).
-    r (int): Radius of the local window.
-    e (float): Regularization parameter.
 
     Returns:
     numpy.ndarray: Refined transmission map.
@@ -79,9 +60,6 @@ def guided_filter(p, i, r, e):
 def dehaze(image):
     """
     Perform image dehazing using the dark channel prior.
-
-    Parameters:
-    image (numpy.ndarray): Input image.
 
     Returns:
     numpy.ndarray: Dehazed image.
