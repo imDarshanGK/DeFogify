@@ -3,6 +3,9 @@ import numpy as np
 import gradio as gr
 
 def dark_channel(img, size=15):
+    """
+    Compute the dark channel prior for an image.
+    """
     r, g, b = cv2.split(img)
     min_img = cv2.min(r, cv2.min(g, b))
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (size, size))
@@ -10,16 +13,25 @@ def dark_channel(img, size=15):
     return dc_img
 
 def get_atmo(img, percent=0.001):
+    """
+    Estimate the atmospheric light in the image.
+    """
     mean_perpix = np.mean(img, axis=2).reshape(-1)
     mean_topper = mean_perpix[:int(img.shape[0] * img.shape[1] * percent)]
     return np.mean(mean_topper)
 
 def get_trans(img, atom, w=0.95):
+    """
+    Compute the transmission map of the image.
+    """
     x = img / atom
     t = 1 - w * dark_channel(x, 15)
     return t
 
 def guided_filter(p, i, r, e):
+    """
+    Apply a guided filter to the transmission map.
+    """
     mean_I = cv2.boxFilter(i, cv2.CV_64F, (r, r))
     mean_p = cv2.boxFilter(p, cv2.CV_64F, (r, r))
     corr_I = cv2.boxFilter(i * i, cv2.CV_64F, (r, r))
@@ -34,6 +46,9 @@ def guided_filter(p, i, r, e):
     return q
 
 def dehaze(image):
+    """
+    Perform image dehazing using the dark channel prior.
+    """
     img = image.astype('float64') / 255
     img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY).astype('float64') / 255
 
