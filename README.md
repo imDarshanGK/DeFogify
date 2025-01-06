@@ -26,13 +26,13 @@ Haze removal is essential for enhancing image clarity and visibility in outdoor 
 
 ## Live Demo
 
-You can try the dehazing app live at ``Hugging Face``:
+- Try the dehazing app live on Hugging Face:
 
 [Visit DeFogify in 🤗 space](https://huggingface.co/spaces/MLap/deFogify)
 
 ## Installation
 
-Ensure you have the required Python packages installed. You can find the dependencies listed in the `requirements.txt` file.
+Ensure you have the required Python packages installed. Dependencies are listed in the `requirements.txt` file.
 
 To install the required packages, use:
 
