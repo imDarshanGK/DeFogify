@@ -26,7 +26,7 @@ Haze removal is essential for enhancing image clarity and visibility in outdoor 
 
 ## Live Demo
 
-- Try the dehazing app live on Hugging Face:
+- You can try the dehazing app live at ``Hugging Face``:
 
 [Visit DeFogify in 🤗 space](https://huggingface.co/spaces/MLap/deFogify)
 
