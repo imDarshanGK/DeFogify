@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
 import gradio as gr
+import tempfile
+import os
 
+# Original Functions (Unchanged)
 def dark_channel(img, size=15):
     """
     Compute the dark channel prior for an image.
@@ -55,17 +58,35 @@ def dehaze(image):
     atom = get_atmo(img)
     trans = get_trans(img, atom)
     trans_guided = guided_filter(trans, img_gray, 20, 0.0001)
-    trans_guided = np.maximum(trans_guided, 0.25)  # Ensure trans_guided is not below 0.25
+    trans_guided = np.maximum(trans_guided, 0.25)
 
     result = np.empty_like(img)
     for i in range(3):
         result[:, :, i] = (img[:, :, i] - atom) / trans_guided + atom
 
-    # Ensure the result is in the range [0, 1]
     result = np.clip(result, 0, 1)
     return (result * 255).astype(np.uint8)
 
-# Save example images for testing
+# Batch Processing Function for Multiple Images
+def process_images(files):
+    """
+    This function processes multiple images using the `dehaze` function
+    and saves the dehazed images to a temporary folder.
+    """
+    temp_dir = tempfile.mkdtemp()  # Create temporary directory to store output images
+    output_files = []  # List to store output file paths
+
+    for file in files:  # Loop over each file
+        img = cv2.imread(file.name)
+        if img is not None:
+            dehazed_img = dehaze(img)  # Apply dehazing
+            output_path = os.path.join(temp_dir, os.path.basename(file.name))
+            cv2.imwrite(output_path, dehazed_img)  # Save the dehazed image
+            output_files.append(output_path)  # Add the output file path to the list
+
+    return output_files  # Return the list of output file paths
+
+# Example Images for Testing (No changes needed)
 example_images = [
     "Sample Images for Testing/ai-generated-9025430_1280.jpg",
     "Sample Images for Testing/meadow-5648849_1280.jpg",
@@ -74,6 +95,7 @@ example_images = [
     "Sample Images for Testing/nature-6722031_1280.jpg"
 ]
 
+# Save Example Images for Gradio (Ensuring paths are correct)
 example_paths = []
 for i, img_path in enumerate(example_images):
     img = cv2.imread(img_path)
@@ -81,13 +103,31 @@ for i, img_path in enumerate(example_images):
     cv2.imwrite(save_path, img)
     example_paths.append([save_path])
 
-# Create Gradio interface
+# Gradio Interface for Single Image Dehazing
 PixelDehazer = gr.Interface(
     fn=dehaze,
     inputs=gr.Image(type="numpy"),
     outputs="image",
     examples=example_paths,
-    cache_examples=False
+    cache_examples=False,
+    description="Upload a single image to remove haze."
 )
 
-PixelDehazer.launch()
+# Gradio Interface for Batch Dehazing
+BatchDehazer = gr.Interface(
+    fn=process_images,
+    inputs=gr.Files(label="Upload Multiple Images", file_types=["image"]),
+    outputs=gr.Files(label="Download Dehazed Images"),
+    description="Upload multiple images to remove haze. Download the processed dehazed images."
+)
+
+# Combined Gradio App with Tabs for Single and Batch Image Processing
+app = gr.TabbedInterface(
+    [PixelDehazer, BatchDehazer],
+    ["Single Image Dehazing", "Batch Image Dehazing"],
+    title="DeFogify App"
+)
+
+# Launch the Gradio App
+if __name__ == "__main__":
+    app.launch()
