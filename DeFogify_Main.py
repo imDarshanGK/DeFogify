@@ -58,7 +58,7 @@ def dehaze(image):
     atom = get_atmo(img)
     trans = get_trans(img, atom)
     trans_guided = guided_filter(trans, img_gray, 20, 0.0001)
-    trans_guided = np.maximum(trans_guided, 0.25)
+    trans_guided = np.maximum(trans_guided, 0.25) # Ensure trans_guided is not below 0.25
 
     result = np.empty_like(img)
     for i in range(3):
