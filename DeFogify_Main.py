@@ -3,6 +3,7 @@ import numpy as np
 import gradio as gr
 import tempfile
 import os
+from tqdm import tqdm
 
 # Original Functions
 def dark_channel(img, size=15):
@@ -49,17 +50,28 @@ def dehaze(image):
     result = np.clip(result, 0, 1)
     return (result * 255).astype(np.uint8)
 
+# Single Image Processing with Progress Bar
+def process_single_image(image):
+    with tqdm(total=1, desc="Processing Image", unit="image") as pbar:
+        dehazed_img = dehaze(image)
+        pbar.update(1)  # Update progress bar after processing the image
+    return dehazed_img
+
 # Batch Processing Function for Multiple Images
 def process_images(files):
     temp_dir = tempfile.mkdtemp()
     output_files = []
-    for file in files:
-        img = cv2.imread(file.name)
-        if img is not None:
-            dehazed_img = dehaze(img)
-            output_path = os.path.join(temp_dir, os.path.basename(file.name))
-            cv2.imwrite(output_path, dehazed_img)
-            output_files.append(output_path)
+    
+    with tqdm(total=len(files), desc="Processing Images", unit="image") as pbar:
+        for file in files:
+            img = cv2.imread(file.name)
+            if img is not None:
+                dehazed_img = dehaze(img)
+                output_path = os.path.join(temp_dir, os.path.basename(file.name))
+                cv2.imwrite(output_path, dehazed_img)
+                output_files.append(output_path)
+            pbar.update(1)  # Update progress bar after each image
+    
     return output_files
 
 # Video Dehazing Function
@@ -72,14 +84,17 @@ def dehaze_video(input_video_path, output_video_path):
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
     frame_count = 0
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-        dehazed_frame = dehaze(frame)
-        out.write(dehazed_frame)
-        frame_count += 1
-        print(f"Processed frame {frame_count}/{total_frames}", end="\r")
+    
+    with tqdm(total=total_frames, desc="Processing Video", unit="frame") as pbar:
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+            dehazed_frame = dehaze(frame)
+            out.write(dehazed_frame)
+            frame_count += 1
+            pbar.update(1)  # Update progress bar for each frame
+    
     cap.release()
     out.release()
     print(f"\nDehazed video saved to: {output_video_path}")
@@ -109,7 +124,7 @@ for i, img_path in enumerate(example_images):
 
 # Gradio Interfaces
 PixelDehazer = gr.Interface(
-    fn=dehaze,
+    fn=process_single_image,
     inputs=gr.Image(type="numpy"),
     outputs="image",
     examples=example_paths,
@@ -140,4 +155,4 @@ app = gr.TabbedInterface(
 
 # Launch the Gradio App
 if __name__ == "__main__":
-    app.launch()
+    app.launch(share=True)
