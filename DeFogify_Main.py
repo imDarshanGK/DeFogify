@@ -50,32 +50,28 @@ def dehaze(image):
     result = np.clip(result, 0, 1)
     return (result * 255).astype(np.uint8)
 
-# Single Image Processing with Progress Bar
+# Single Image Processing
 def process_single_image(image):
-    with tqdm(total=1, desc="Processing Image", unit="image") as pbar:
-        dehazed_img = dehaze(image)
-        pbar.update(1)  # Update progress bar after processing the image
+    dehazed_img = dehaze(image)
     return dehazed_img
 
-# Batch Processing Function for Multiple Images
+# Batch Processing Function for Multiple Images with Progress Bar
 def process_images(files):
     temp_dir = tempfile.mkdtemp()
     output_files = []
     
-    with tqdm(total=len(files), desc="Processing Images", unit="image") as pbar:
-        for file in files:
-            img = cv2.imread(file.name)
-            if img is not None:
-                dehazed_img = dehaze(img)
-                output_path = os.path.join(temp_dir, os.path.basename(file.name))
-                cv2.imwrite(output_path, dehazed_img)
-                output_files.append(output_path)
-            pbar.update(1)  # Update progress bar after each image
+    for file in tqdm(files, desc="Processing Images"):
+        img = cv2.imread(file.name)
+        if img is not None:
+            dehazed_img = dehaze(img)
+            output_path = os.path.join(temp_dir, os.path.basename(file.name))
+            cv2.imwrite(output_path, dehazed_img)
+            output_files.append(output_path)
     
     return output_files
 
-# Video Dehazing Function
-def dehaze_video(input_video_path, output_video_path):
+# Video Dehazing Function with Gradio Progress Bar
+def dehaze_video(input_video_path, output_video_path, progress=gr.Progress()):
     cap = cv2.VideoCapture(input_video_path)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     fps = int(cap.get(cv2.CAP_PROP_FPS))
@@ -85,15 +81,15 @@ def dehaze_video(input_video_path, output_video_path):
     out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
     frame_count = 0
     
-    with tqdm(total=total_frames, desc="Processing Video", unit="frame") as pbar:
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-            dehazed_frame = dehaze(frame)
-            out.write(dehazed_frame)
-            frame_count += 1
-            pbar.update(1)  # Update progress bar for each frame
+    progress(0, desc="Processing Video", unit="frame")
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+        dehazed_frame = dehaze(frame)
+        out.write(dehazed_frame)
+        frame_count += 1
+        progress(frame_count / total_frames)
     
     cap.release()
     out.release()
@@ -103,7 +99,8 @@ def dehaze_video(input_video_path, output_video_path):
 def process_video(file):
     input_video_path = file  # File is a string representing the path
     output_video_path = os.path.join(tempfile.mkdtemp(), "dehazed_video.mp4")
-    dehaze_video(input_video_path, output_video_path)
+    progress = gr.Progress()
+    dehaze_video(input_video_path, output_video_path, progress)
     return output_video_path
 
 # Example Images for Testing
