@@ -152,4 +152,4 @@ app = gr.TabbedInterface(
 
 # Launch the Gradio App
 if __name__ == "__main__":
-    app.launch(share=True)
+    app.launch(share=True) 
