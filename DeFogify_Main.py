@@ -157,7 +157,6 @@ example_images = [
     "Sample Images for Testing/ai-generated-9025430_1280.jpg",
     "Sample Images for Testing/meadow-5648849_1280.jpg",
     "Sample Images for Testing/mountains-7662717_1280.jpg",
-    "Sample Images for Testing/sample_image_white_wolf.jpg",
     "Sample Images for Testing/nature-6722031_1280.jpg"
 ]
 
