@@ -40,6 +40,5 @@ To install the required packages, use:
 pip install -r requirements.txt
 ```
 
-## Future Work
-Video Dehazing: Extend support for video processing.
+
 
