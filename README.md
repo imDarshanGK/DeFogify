@@ -39,6 +39,12 @@ To install the required packages, use:
 ```bash
 pip install -r requirements.txt
 ```
+For Ubuntu/Debian-based systems, also install:
+
+```bash
+sudo apt-get update
+sudo apt-get install libgl1-mesa-glx
+```
 
 
 
