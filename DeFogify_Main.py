@@ -70,30 +70,44 @@ def process_images(files):
     
     return output_files
 
-# Video Dehazing Function with Gradio Progress Bar
-def dehaze_video(input_video_path, output_video_path, progress=gr.Progress()):
-    cap = cv2.VideoCapture(input_video_path)
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
-    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
-    frame_count = 0
-    
-    progress(0, desc="Processing Video", unit="frame")
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-        dehazed_frame = dehaze(frame)
-        out.write(dehazed_frame)
-        frame_count += 1
-        progress(frame_count / total_frames)
-    
-    cap.release()
-    out.release()
-    print(f"\nDehazed video saved to: {output_video_path}")
+# Video Dehazing Function with Gradio Progress Bar and Error Handling
+def dehaze_video(input_video_path, output_video_path, progress=None):
+    try:
+        cap = cv2.VideoCapture(input_video_path)
+        if not cap.isOpened():
+            raise ValueError("Error: Could not open video.")
+
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
+        frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+        if total_frames <= 0:  # Assume a constant count for webcam scenarios
+            total_frames = 1000
+
+        out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
+        frame_count = 0
+
+        if progress is not None:
+            progress(0, desc="Processing Video", unit="frame")
+
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+            dehazed_frame = dehaze(frame)
+            out.write(dehazed_frame)
+            frame_count += 1
+
+            if progress is not None:
+                progress(frame_count / total_frames)  # Ensure progress is within 0-1 range
+
+        cap.release()
+        out.release()
+        print(f"\nDehazed video saved to: {output_video_path}")
+    except Exception as e:
+        print(f"An error occurred during video processing: {e}")
 
 # Gradio Video Processing Wrapper
 def process_video(file):
@@ -102,6 +116,41 @@ def process_video(file):
     progress = gr.Progress()
     dehaze_video(input_video_path, output_video_path, progress)
     return output_video_path
+
+# Real-Time Webcam Processing with Gradio Progress Bar
+def dehaze_webcam(progress=gr.Progress()):
+    try:
+        cap = cv2.VideoCapture(0)  # Capture from the first webcam
+        if not cap.isOpened():
+            raise ValueError("Unable to open webcam")
+
+        frame_count = 0
+        total_frames = 100  # Arbitrary number for progress bar
+        progress(0, desc="Processing Webcam Feed", unit="frame")
+
+        while frame_count < total_frames:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            dehazed_frame = dehaze(frame)
+            frame_count += 1
+            progress(frame_count / total_frames)  # Ensure progress is within 0-1 range
+
+            cv2.imshow('Dehazed Webcam Feed', dehazed_frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        cap.release()
+        cv2.destroyAllWindows()
+        progress(1)  # Ensure progress bar reaches 100%
+    except Exception as e:
+        print(f"An error occurred during webcam processing: {e}")
+
+# Gradio Webcam Processing Wrapper
+def process_webcam():
+    progress = gr.Progress()
+    dehaze_webcam(progress)
+    return "Webcam processing completed."
 
 # Example Images for Testing
 example_images = [
