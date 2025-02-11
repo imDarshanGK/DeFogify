@@ -1,18 +1,3 @@
-"""
-DeFogify App
-============
-
-This application removes haze from single images, multiple images (bulk dehazing), and video files
-using the Dark Channel Prior approach.
-
-Features:
-- Single Image Dehazing: Process one image at a time to remove haze.
-- Bulk Image Dehazing: Process multiple images simultaneously.
-- Video Dehazing: Process videos by dehazing each frame individually.
-
-Please refer to the README.md file for more details on the features and usage instructions.
-"""
-
 import cv2
 import numpy as np
 import gradio as gr
@@ -58,7 +43,7 @@ def dehaze(image):
     atom = get_atmo(img)
     trans = get_trans(img, atom)
     trans_guided = guided_filter(trans, img_gray, 20, 0.0001)
-    trans_guided = np.maximum(trans_guided, 0.25)  # Ensure trans_guided does not go below 0.25
+    trans_guided = np.maximum(trans_guided, 0.25)  # Ensure trans_guided is not below 0.25
     result = np.empty_like(img)
     for i in range(3):
         result[:, :, i] = (img[:, :, i] - atom) / trans_guided + atom
@@ -70,7 +55,7 @@ def process_single_image(image):
     dehazed_img = dehaze(image)
     return dehazed_img
 
-# Bulk Image Processing Function for Multiple Images with Progress Bar
+# Batch Processing Function for Multiple Images with Progress Bar
 def process_images(files):
     temp_dir = tempfile.mkdtemp()
     output_files = []
@@ -98,7 +83,7 @@ def dehaze_video(input_video_path, output_video_path, progress=None):
         frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-        if total_frames <= 0:  # Use constant count for webcam scenarios
+        if total_frames <= 0:  # Assume a constant count for webcam scenarios
             total_frames = 1000
 
         out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
@@ -116,7 +101,7 @@ def dehaze_video(input_video_path, output_video_path, progress=None):
             frame_count += 1
 
             if progress is not None:
-                progress(frame_count / total_frames)  # Progress in range 0-1
+                progress(frame_count / total_frames)  # Ensure progress is within 0-1 range
 
         cap.release()
         out.release()
@@ -140,7 +125,7 @@ def dehaze_webcam(progress=gr.Progress()):
             raise ValueError("Unable to open webcam")
 
         frame_count = 0
-        total_frames = 100  # Arbitrary number for progress
+        total_frames = 100  # Arbitrary number for progress bar
         progress(0, desc="Processing Webcam Feed", unit="frame")
 
         while frame_count < total_frames:
@@ -149,7 +134,7 @@ def dehaze_webcam(progress=gr.Progress()):
                 break
             dehazed_frame = dehaze(frame)
             frame_count += 1
-            progress(frame_count / total_frames)  # Progress update
+            progress(frame_count / total_frames)  # Ensure progress is within 0-1 range
 
             cv2.imshow('Dehazed Webcam Feed', dehazed_frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -157,7 +142,7 @@ def dehaze_webcam(progress=gr.Progress()):
 
         cap.release()
         cv2.destroyAllWindows()
-        progress(1)  # Ensure progress reaches completion
+        progress(1)  # Ensure progress bar reaches 100%
     except Exception as e:
         print(f"An error occurred during webcam processing: {e}")
 
@@ -196,20 +181,20 @@ BatchDehazer = gr.Interface(
     fn=process_images,
     inputs=gr.Files(label="Upload Multiple Images", file_types=["image"]),
     outputs=gr.Files(label="Download Dehazed Images"),
-    description="Upload multiple images to remove haze and download the processed images."
+    description="Upload multiple images to remove haze. Download the processed dehazed images."
 )
 
 VideoDehazer = gr.Interface(
     fn=process_video,
     inputs=gr.Video(label="Upload a Video"),
     outputs=gr.File(label="Download Dehazed Video"),
-    description="Upload a video to remove haze and download the processed video."
+    description="Upload a video to remove haze. Download the processed dehazed video."
 )
 
-# Combined Gradio App with clear feature names
+# Combined Gradio App
 app = gr.TabbedInterface(
     [PixelDehazer, BatchDehazer, VideoDehazer],
-    ["Single Image Dehazing", "Bulk Image Dehazing", "Video Dehazing"],
+    ["Single Image Dehazing", "Batch Image Dehazing", "Video Dehazing"],
     title="DeFogify App"
 )
 
