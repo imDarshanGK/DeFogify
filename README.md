@@ -1,8 +1,7 @@
-# DeFogify
-
 ## Overview
 
-This project implements a single-image haze removal technique using the Dark Channel Prior, as described in the research paper: "Single Image Haze Removal Using Dark Channel Prior". The dehazing algorithm is designed to enhance the quality of images affected by haze. This method is effective for various applications in image processing where haze reduction is required.
+This project implements a single-image haze removal technique using the Dark Channel Prior, as described in the research paper: ``Single Image Haze Removal Using Dark Channel Prior``
+The dehazing algorithm is designed to enhance the quality of images affected by haze. This method is effective for various applications in image processing where haze reduction is required.
 
 ## Introduction
 
@@ -12,16 +11,14 @@ Haze removal is essential for enhancing image clarity and visibility in outdoor 
 
 - **Single Image Dehazing**  
   Process one image at a time to remove haze and bring out hidden details using the Dark Channel Prior.
-  
 - **Bulk Image Dehazing**  
   Process multiple images simultaneously. This feature is perfect for efficiently dehazing an entire batch of images.
-  
 - **Video Dehazing**  
   Dehaze video files by processing each frame individually to ensure a clear and detailed output even for moving visual content.
 
-## Research Paper
+[Docs]: added features of the product
 
-[Single Image Haze Removal Using Dark Channel Prior](https://ieeexplore.ieee.org/document/5567108)
+## [Research Paper](https://ieeexplore.ieee.org/document/5567108)
 
 ### Before and After Examples
 
@@ -33,7 +30,7 @@ Haze removal is essential for enhancing image clarity and visibility in outdoor 
 
 ## Live Demo
 
-Try the dehazing app live at Hugging Face:
+Try the dehazing app live at ``Hugging Face``:
 
 [Visit DeFogify in 🤗 space](https://huggingface.co/spaces/MLap/deFogify)
 
