@@ -3,6 +3,8 @@
 This project implements a single-image haze removal technique using the Dark Channel Prior, as described in the research paper: ``Single Image Haze Removal Using Dark Channel Prior``
 The dehazing algorithm is designed to enhance the quality of images affected by haze. This method is effective for various applications in image processing where haze reduction is required.
 
+## [Research Paper](https://ieeexplore.ieee.org/document/5567108)
+
 ## Introduction
 
 Haze removal is essential for enhancing image clarity and visibility in outdoor scenes, improving the performance of vision-based applications.
@@ -16,9 +18,9 @@ Haze removal is essential for enhancing image clarity and visibility in outdoor 
 - **Video Dehazing**  
   Dehaze video files by processing each frame individually to ensure a clear and detailed output even for moving visual content.
 
-[Docs]: added features of the product
 
-## [Research Paper](https://ieeexplore.ieee.org/document/5567108)
+
+
 
 ### Before and After Examples
 
